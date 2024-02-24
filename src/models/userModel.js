@@ -57,6 +57,11 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+  this.referralCode = this._id;
+  next();
+});
 userSchema.methods.isPasswordCorrect = async function (password) {
   await bcrypt.compare(password, this.password);
 };
