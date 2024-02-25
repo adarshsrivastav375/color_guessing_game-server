@@ -63,15 +63,15 @@ userSchema.pre("save", async function (next) {
   next();
 });
 userSchema.methods.isPasswordCorrect = async function (password) {
-  await bcrypt.compare(password, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateAceesToken = async function () {
-  jwt.sign(
+userSchema.methods.generateAccessToken = function () {
+  return jwt.sign(
     {
-      _id: this.id,
-      name: this.name,
+      _id: this._id,
       email: this.email,
+      name: this.name,
     },
     process.env.ACCESS_TOKEN_KEY,
     {
@@ -79,11 +79,10 @@ userSchema.methods.generateAceesToken = async function () {
     }
   );
 };
-
-userSchema.methods.generateRefreshToken = async function () {
-  jwt.sign(
+userSchema.methods.generateRefreshToken = function () {
+  return jwt.sign(
     {
-      _id: this.id,
+      _id: this._id,
     },
     process.env.REFRESH_TOKEN_KEY,
     {
@@ -91,5 +90,4 @@ userSchema.methods.generateRefreshToken = async function () {
     }
   );
 };
-
 export const User = mongoose.model("User", userSchema);

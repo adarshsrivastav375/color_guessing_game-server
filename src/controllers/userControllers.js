@@ -5,9 +5,10 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 
 const generateTokens = async (userId) => {
   try {
-    const user = User.findById(userId);
-    const accessToken = user.generateRefreshToken();
-    const refreshToken = user.generateAceesToken();
+    const user = await User.findById(userId);
+    const refreshToken = user.generateRefreshToken();
+    const accessToken = user.generateAccessToken();
+    
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
     return { accessToken, refreshToken };
@@ -50,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
 //log in
 const loginUser = asyncHandler(async (req, res) => {
   const { email, mobile, password } = req.body;
-  if (!email || !mobile) {
+  if (!email && !mobile) {
     throw new ApiError(400, "email or mobile is requird");
   }
   const user = await User.findOne({
@@ -63,8 +64,9 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!isUserValid) {
     throw new ApiError(401, "invalid user credentials");
   }
-  const { accessToken, refreshToken } = await generateTokens(usre._id);
-  const loggedinUser = await User.finedOne(user._id).select(
+  const { accessToken, refreshToken } = await generateTokens(user._id);
+
+  const loggedinUser = await User.findOne(user._id).select(
     "-refreshToken -password"
   );
   const options = {
