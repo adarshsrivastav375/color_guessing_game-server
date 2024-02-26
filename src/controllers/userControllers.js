@@ -205,15 +205,6 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Account details updated successfully"));
 });
-
-// join a bet 
-
-const JoinaGame = asyncHandler(async (req, res) => {
- 
-
-
-})
-
 export {
   registerUser,
   loginUser,
