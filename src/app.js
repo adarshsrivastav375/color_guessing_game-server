@@ -12,8 +12,12 @@ app.use(cookieParser());
 
 //routes import
 import userRouter from "./routes/userRoutes.js";
+import gameRoute from "./routes/gameRoutes.js";
+import betRoute from "./routes/betRoutes.js"
 
 //routes declaration
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/users", gameRoute);
+app.use("/api/v1/users", betRoute);
 
 export default app;

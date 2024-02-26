@@ -14,13 +14,20 @@ const transactionSchema = new Schema(
     },
     type: {
       type: String,
-      enum: ["deposit", "withdraw", "bet"],
+      enum: ["deposit", "withdraw"],
       required: true,
     },
+    status: {
+      type: String,
+      enum:["processing","accepted","rejected"]
+    },
+    transactionId: {
+      type:Number
+    }
   },
   {
     timestamps: true,
   }
 );
 transactionSchema.plugin(AggregatePagenate);
-export const Transaction = mongoose.model("Transaction", userSchema);
+export const Transaction = mongoose.model("Transaction", transactionSchema);

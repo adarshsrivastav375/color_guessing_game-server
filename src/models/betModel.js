@@ -1,23 +1,30 @@
 import mongoose, { Schema } from "mongoose";
-import { Game } from "./gameModelSchema";
+import { Game } from "./gameModelSchema.js";
 
 const betSchema = new Schema(
   {
     gameId: {
       type: Schema.Types.ObjectId,
       ref: "Game",
+      required: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
     },
     betAmout: {
       type: Number,
       required: true,
     },
     choosedColor: {
-        type: String,
-        enum:["red","green","yellow"]
+      type: String,
+      enum: ["red", "green", "yellow"],
+      required: true,
+    },
+    result: {
+      type: String,
+      enum: ["win", "lose"],
     },
   },
   {
