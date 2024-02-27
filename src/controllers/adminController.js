@@ -84,7 +84,7 @@ const adminLogin = asyncHandler(async (req, res) => {
 });
 //logout
 const logoutadmin = asyncHandler(async (req, res) => {
-  User.findByIdAndUpdate(
+  Admin.findByIdAndUpdate(
     req.user._id,
     {
       $set: {
@@ -106,7 +106,7 @@ const logoutadmin = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "user loggedOut"));
 });
 // refresh access token
-const refreshAccessToken = asyncHandler(async (req, res) => {
+const refreshAccessTokenAdmin = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
 
@@ -151,7 +151,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 //password change
-const changeCurrentPassword = asyncHandler(async (req, res) => {
+const changePasswordAdmin = asyncHandler(async (req, res) => {
   const { oldPassword, newPassword } = req.body;
 
   const user = await Admin.findById(req.user?._id);
@@ -175,7 +175,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, req.user, "User fetched successfully"));
 });
 
-const updateAccountDetails = asyncHandler(async (req, res) => {
+const updateAdminDetails = asyncHandler(async (req, res) => {
   const { name, mobile } = req.body;
 
   if (!name || !mobile) {
@@ -201,8 +201,8 @@ export {
   registerAdmin,
   adminLogin,
   logoutadmin,
-  refreshAccessToken,
-  changeCurrentPassword,
+  refreshAccessTokenAdmin,
+  changePasswordAdmin,
   getCurrentUser,
-  updateAccountDetails,
+  updateAdminDetails,
 };

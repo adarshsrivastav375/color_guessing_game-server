@@ -95,8 +95,8 @@ const logoutUser = asyncHandler(async (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
     {
-      $set: {
-        refreshToken: undefined,
+      $unset: {
+        refreshToken: 1,
       },
     },
     {
@@ -186,7 +186,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 const updateAccountDetails = asyncHandler(async (req, res) => {
   const { name, mobile } = req.body;
 
-  if (!name || !mobile) {
+  if (!(name || mobile)) {
     throw new ApiError(400, "All fields are required");
   }
 
@@ -201,6 +201,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     { new: true }
   ).select("-password -refreshToken");
 
+  console.log(user);
   return res
     .status(200)
     .json(new ApiResponse(200, user, "Account details updated successfully"));
