@@ -4,6 +4,19 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { Game } from "../models/gameModelSchema.js";
 import { User } from "../models/userModel.js";
 import { Bet } from "../models/betModel.js";
+import cron from "node-cron";
+
+cron.schedule("01 * * * * *", () => {
+  console.log("running a task every minute");
+});
+
+
+const generateGame = asyncHandler(async(gameType) => {
+  await Game.create({
+    gameType,
+    status: "ongoing"
+  });
+});
 
 const createNewGame = asyncHandler(async (req, res) => {
   const { gameType } = req.body;
