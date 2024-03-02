@@ -3,9 +3,7 @@ import { DB_NAME } from "../constants.js";
 
 const DB_connect = async () => {
   try {
-    const conectionInstance = await monngoose.connect(
-      `${process.env.DB_URI}/${DB_NAME}`
-    );
+    const conectionInstance = await monngoose.connect(process.env.DB_URI);
     console.log(
       `\n app is connected to mongoDB... DB_Host ${conectionInstance.connection.host}`
     );

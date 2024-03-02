@@ -25,6 +25,10 @@ const gameSchema = new Schema(
       type: Number,
       default: 0,
     },
+    expiredAt: {
+      type: Date,
+      required: true
+    },
   },
   {
     timestamps: true,
