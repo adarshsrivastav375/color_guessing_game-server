@@ -114,9 +114,11 @@ const getCurrentActiveGame = asyncHandler(async (req, res) => {
 
 const gameUserChoice = asyncHandler(async (req, res) => {
   const { body } = req;
+  const game = await Game.findOne({ _id: body.gameId })
   await Bet.create({
     gameId: body.gameId,
-    userId: body.userId,
+    gameType: game.gameType,
+    userId: req.user._id,
     betAmount: parseInt(body.amount),
     choosedColor: body.color,
   })
@@ -125,8 +127,8 @@ const gameUserChoice = asyncHandler(async (req, res) => {
 });
 
 const getBets = asyncHandler(async (req, res) => {
-  const { pageNumber, limit, id } = req.query;
-  const query = { userId: id };
+  const { pageNumber, limit, gameType } = req.query;
+  const query = { userId: req.user._id, gameType };
   const totalCouponsCount = await Bet.countDocuments(query);
 
   const totalPages = Math.ceil(parseInt(totalCouponsCount) / parseInt(parseInt(limit)));

@@ -4,9 +4,9 @@ import gameController from "../controllers/gameController.js";
 
 const router = Router();
 
-router.get('/', gameController.getCurrentActiveGame);
-router.get('/bet', gameController.getBets);
-router.get('/contast', gameController.getContasts);
-router.post('/', gameController.gameUserChoice);
+router.get('/', verifyJWT, gameController.getCurrentActiveGame);
+router.get('/bet', verifyJWT, gameController.getBets);
+router.get('/contast', verifyJWT, gameController.getContasts);
+router.post('/', verifyJWT, gameController.gameUserChoice);
 
 export default router;

@@ -27,6 +27,11 @@ const betSchema = new Schema(
       type: String,
       enum: ["win", "lose"],
     },
+    gameType: {
+      type: String,
+      enum: ["Parity", "Sapre", "Bcone", "Emred"],
+      default: "Parity",
+    },
   },
   {
     timestamps: true,
