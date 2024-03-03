@@ -30,9 +30,21 @@ const newTransaction = asyncHandler(async (req, res) => {
 
 //for admin
 const findPresseingTransactions = asyncHandler(async (req, res) => {
-  const transactions = await Transaction.find({
-    status: "processing",
-  });
+  const transactions = await Transaction.aggregate([
+    {
+      $match: { status: "processing" },
+    },
+    {
+      $lookup:
+      {
+        from: 'users',
+        localField: 'userId',
+        foreignField: "_id",
+        as: "user"
+      }
+    }
+  ]);
+
   if (!transactions) {
     throw new ApiError(404, "No processing transaction found");
   }
@@ -42,7 +54,6 @@ const findPresseingTransactions = asyncHandler(async (req, res) => {
       new ApiResponse(200, transactions, "here is all pending transactions")
     );
 });
-
 const approveTransaction = asyncHandler(async (req, res) => {
   const transactions = await Transaction.find({
     status: "processing",
@@ -73,6 +84,33 @@ const approveTransaction = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(200, updatedTransaction, "transaction Accepted"));
 });
+
+const approveOrRejectTransaction = asyncHandler(async (req, res) => {
+  const { transactionId, status } = req.body;
+  const transaction = await Transaction.findOne({
+    _id: transactionId,
+  });
+  if (!transaction) {
+    throw new ApiError(404, "No processing transaction found");
+    return
+  }
+
+  if (status == 'accepted') {
+    const user = await User.findById(transaction.userId);
+    if (!user) {
+      throw new ApiError(404, "No user found");
+    }
+
+    user.walletBalance += transaction.amount;
+
+    await user.save();
+
+  }
+  await Transaction.updateOne({ _id: transactionId }, { status });
+  return res
+    .status(201)
+    .json(new ApiResponse(200, updatedTransaction, "Transaction Saved"));
+});
 //find users transactions
 const usersTransctions = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
@@ -94,4 +132,5 @@ export {
   approveTransaction,
   findPresseingTransactions,
   usersTransctions,
+  approveOrRejectTransaction
 };
