@@ -19,11 +19,11 @@ const transactionSchema = new Schema(
     },
     status: {
       type: String,
-      enum:["processing","accepted","rejected"]
+      enum: ["processing", "accepted", "rejected"],
     },
     transactionId: {
-      type:Number
-    }
+      type: String,
+    },
   },
   {
     timestamps: true,

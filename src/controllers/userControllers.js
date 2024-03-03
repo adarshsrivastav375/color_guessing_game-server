@@ -20,6 +20,7 @@ const generateTokens = async (userId) => {
 //register user
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, mobile, password, referralBy } = req.body;
+  console.log(req.body);
   if ([name, email, mobile, password].some((field) => field === "")) {
     throw new ApiError(400, "All fields are required");
   }

@@ -1,1 +1,1 @@
-export const DB_NAME = "playto";
+export const DB_NAME = "betting-setting";

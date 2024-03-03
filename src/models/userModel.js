@@ -2,6 +2,22 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+
+const BankSchema = new Schema({
+  bankName: {
+    type: String,
+    required: true,
+  },
+  acNumber: {
+    type: Number,
+    required: true,
+  },
+  ifsc: {
+    type: String,
+    required: true,
+  },
+});
+
 const userSchema = new Schema(
   {
     name: {
@@ -36,12 +52,7 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    transactions: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      },
-    ],
+    bankDetails: { type: BankSchema },
     refreshToken: {
       type: String,
     },

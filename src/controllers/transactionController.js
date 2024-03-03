@@ -7,15 +7,16 @@ import { User } from "../models/userModel.js";
 
 //new transaction
 const newTransaction = asyncHandler(async (req, res) => {
-  const { amount, type } = req.body;
-  const id = req.user?._id;
+  const { amount, type, transactionId } = req.body;
+  const userId = req.user?._id;
   if ([amount, type].some((field) => field === "")) {
     throw new ApiError(400, "please enter amount");
   }
   const transaction = await Transaction.create({
-    id,
+    userId,
     amount,
     type,
+    transactionId,
     status: "processing",
   });
   if (!transaction) {
@@ -24,7 +25,7 @@ const newTransaction = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(200, transaction, "user created successfully"));
+    .json(new ApiResponse(200, transaction, "processed successfully"));
 });
 
 //for admin
@@ -37,7 +38,9 @@ const findPresseingTransactions = asyncHandler(async (req, res) => {
   }
   return res
     .status(201)
-    .json(new ApiResponse(200, transactions, "here is all pending transactions"));
+    .json(
+      new ApiResponse(200, transactions, "here is all pending transactions")
+    );
 });
 
 const approveTransaction = asyncHandler(async (req, res) => {
