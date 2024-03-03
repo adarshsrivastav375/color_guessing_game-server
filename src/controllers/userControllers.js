@@ -20,7 +20,6 @@ const generateTokens = async (userId) => {
 //register user
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, mobile, password, referralBy } = req.body;
-  console.log(req.body);
   if ([name, email, mobile, password].some((field) => field === "")) {
     throw new ApiError(400, "All fields are required");
   }
@@ -207,6 +206,36 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(200, user, "Account details updated successfully"));
 });
+
+// add bank details
+const addBankDetails = asyncHandler(async (req, res) => {
+  const { bankName, acNumber, ifsc } = req.body;
+  if ([bankName, acNumber, ifsc].some((field) => field === "")) {
+    throw new ApiError(400, "All fields are required");
+  }
+  const userId = req.user?._id;
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new ApiError(404, "user not found");
+  }
+  user.bankDetails = { bankName, acNumber, ifsc };
+  await user.save();
+  const updatedUser = await User.findById(user._id).select(
+    " -refreshToken -password"
+  );
+  if (!updatedUser) {
+    throw new ApiError(
+      500,
+      "Something went wrong while adding account details"
+    );
+  }
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, updatedUser, "Account details updated successfully")
+    );
+});
+
 export {
   registerUser,
   loginUser,
@@ -215,4 +244,5 @@ export {
   changeCurrentPassword,
   getCurrentUser,
   updateAccountDetails,
+  addBankDetails,
 };

@@ -73,5 +73,25 @@ const approveTransaction = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(200, updatedTransaction, "transaction Accepted"));
 });
+//find users transactions
+const usersTransctions = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+  const transactions = await Transaction.find({
+    userId: userId,
+  });
+  if (!transactions) {
+    throw new ApiError(404, "No transactions found");
+  }
+  return res
+    .status(201)
+    .json(
+      new ApiResponse(200, transactions, "here is all transactions")
+    );
+});
 
-export { newTransaction, approveTransaction, findPresseingTransactions };
+export {
+  newTransaction,
+  approveTransaction,
+  findPresseingTransactions,
+  usersTransctions,
+};

@@ -2,7 +2,6 @@ import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-
 const BankSchema = new Schema({
   bankName: {
     type: String,
@@ -52,7 +51,7 @@ const userSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    bankDetails: { type: BankSchema },
+    bankDetails: { type: BankSchema, default: {} },
     refreshToken: {
       type: String,
     },
