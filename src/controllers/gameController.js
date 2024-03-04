@@ -21,13 +21,9 @@ cron.schedule("*/15 * * * *", async () => {
   await generateGame("Emred", 15);
 });
 
-let generateGame = async (gameType, minutesToAdd) => {
+const generateGame = async (gameType, minutesToAdd) => {
   try {
-    const activeGame = await Game.find({ gameType, status: "ongoing" });
-    while (activeGame) {
-      await UpdateGame(gameType, activeGame);
-      activeGame = await Game.find({ gameType, status: "ongoing" });
-    }
+    await UpdateGame(gameType);
     const currentDate = dayjs();
 
     // Add minutesToAdd to the current date
@@ -43,13 +39,13 @@ let generateGame = async (gameType, minutesToAdd) => {
   }
 };
 
-const UpdateGame = async (gameType, activeGame) => {
+const UpdateGame = async (gameType) => {
   try {
-    // const game = await Game.findOne({ gameType, status: "ongoing" });
-    if (!activeGame) {
+    const game = await Game.findOne({ gameType, status: "ongoing" });
+    if (!game) {
       return;
     }
-    if (activeGame.status === "completed") {
+    if (game.status === "completed") {
       return;
     }
 
@@ -75,10 +71,10 @@ const UpdateGame = async (gameType, activeGame) => {
     };
 
     await Game.updateOne(
-      { _id: activeGame._id },
+      { _id: game._id },
       { result: result, status: "completed" }
     );
-    await updateBetResultsAndRewards(activeGame._id, colorToUpdate);
+    await updateBetResultsAndRewards(game._id, colorToUpdate);
   } catch (error) {
     console.log("error:", error);
   }
