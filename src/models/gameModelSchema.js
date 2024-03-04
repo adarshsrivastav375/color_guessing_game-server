@@ -27,7 +27,7 @@ const gameSchema = new Schema(
     },
     expiredAt: {
       type: Date,
-      required: true
+      required: true,
     },
   },
   {

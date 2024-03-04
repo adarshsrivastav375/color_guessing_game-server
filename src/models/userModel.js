@@ -5,15 +5,15 @@ import jwt from "jsonwebtoken";
 const BankSchema = new Schema({
   bankName: {
     type: String,
-    required: true,
+    required: false,
   },
   acNumber: {
     type: Number,
-    required: true,
+    required: false,
   },
   ifsc: {
     type: String,
-    required: true,
+    required: false,
   },
 });
 
@@ -68,7 +68,6 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
   this.referralCode = this._id;
   next();
 });
