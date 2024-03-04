@@ -21,7 +21,7 @@ cron.schedule("*/15 * * * *", async () => {
   await generateGame("Emred", 15);
 });
 
-const generateGame = async (gameType, minutesToAdd) => {
+let generateGame = async (gameType, minutesToAdd) => {
   try {
     const activeGame = await Game.find({ gameType, status: "ongoing" });
     while (activeGame) {
