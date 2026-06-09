@@ -17,6 +17,10 @@ import betRoute from "./routes/betRoutes.js";
 import adminRoute from "./routes/adminRoutes.js";
 import transactionRoute from "./routes/transactionRoute.js";
 
+app.get("/test", (req, res) => {
+  res.send("hello world")
+})
+
 //routes declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/game", gameRoute);
